@@ -1,11 +1,11 @@
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/theme/app_color.dart';
-import 'package:flutter_application_1/widgets/main_screen/main_screen_widget.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_application_1/site_layout.dart';
+
+
+import 'widgets/movie_list/movie_details.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -14,20 +14,24 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "MovieTime",
-      theme: ThemeData(
-        appBarTheme: AppBarTheme(
-          backgroundColor: AppColor.mainPurple,
-          foregroundColor: Colors.white
-        ),
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          backgroundColor:Colors.white,
-          selectedItemColor: AppColor.mainPurple,
-          unselectedItemColor: Color.fromARGB(255, 121, 121, 121),
-        )
-      ),
-      home: MainScreenWidget(),
+      // theme: ThemeData(
 
+      //   bottomNavigationBarTheme: bottomBarTheme,
+      // ),
+     // home: SiteLayout(),
+      routes: {
+        '/main_screen': (context) => SiteLayout(),
+        // '/main_screen/search': (context) => SearchPage(),
+        // '/main_screen/favorites': (context) => FavoritesList(),
+        '/main_screen/movie_detais': (context) {
+          final arguments = ModalRoute.of(context)?.settings.arguments;
+          if (arguments is int) {
+            return MovieDetailsWidget(movie_id: arguments);
+          }
+          return MovieDetailsWidget(movie_id: 0);
+        },
+      },
+      initialRoute: '/main_screen',
     );
   }
 }
