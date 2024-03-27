@@ -1,24 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/api/api.dart';
+import 'package:flutter_application_1/classes/movie_class.dart';
+import 'package:flutter_application_1/models/movie_model.dart';
 import 'package:flutter_application_1/resourses/app_images.dart';
 import 'package:flutter_application_1/responsive/responsive_layout.dart';
 import 'package:flutter_application_1/theme/app_color.dart';
 import 'package:flutter_application_1/widgets/app_bar.dart';
 
-class MovieDetailsWidget extends StatefulWidget {
-  final int movie_id;
+// class MovieDetailsWidget extends StatefulWidget {
+//   final MovieModel movie;
 
-  const MovieDetailsWidget({super.key, required this.movie_id});
+//   const MovieDetailsWidget({super.key, required this.movie});
 
-  @override
-  State<MovieDetailsWidget> createState() => _MovieDetailsWidgetState();
-}
+//   @override
+//   State<MovieDetailsWidget> createState() => _MovieDetailsWidgetState();
+// }
 
-class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
+class MovieDetailsWidget extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffkey = GlobalKey();
+  final GlobalKey<ScaffoldState> scaffkey1 = GlobalKey();
+  final GlobalKey<ScaffoldState> scaffkey2 = GlobalKey();
+
+
+
+  MovieDetailsWidget({super.key, required this.movie});
+
+  final MovieModel movie;
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
         appBar: !ResponsiveLayout.isDesktopScreen(context)
             ? AppBar(
@@ -52,11 +62,11 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                 Stack(clipBehavior: Clip.none, children: [
                   Container(
                     width: 760,
-                    child: const Image(
-                        height: 260,
-                        fit: BoxFit.cover,
-                        image: AssetImage(AppImages.movieBannerPlaceholder)),
-                  ),
+                    child:  Image.network(
+                                '${Api.imagePath}${movie.posterPath}',
+                                filterQuality: FilterQuality.high,
+                                fit: BoxFit.cover,
+                  )),
                   Positioned(
                     top: 240,
                     left: 0,
@@ -76,10 +86,14 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                           ),
                         ],
                       ),
-                      child: const Padding(
+                      child:  Padding(
                           padding: EdgeInsets.all(32),
                           child: Column(
-                            children: [MovieDetailsInfoWidget(), UserRating()],
+                            children: [
+                               MovieDetailsInfoWidget(
+                                  movie: movie, key: scaffkey1),
+                              UserRating()
+                            ],
                           )),
                     ),
                   )
@@ -125,13 +139,15 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                 ),
                                 clipBehavior: Clip.hardEdge,
                                 child: Row(children: [
-                                  Column(children: [
-                                    const Image(
-                                        width: 260,
-                                        image: AssetImage(
-                                            AppImages.moviePlaceholder)),
+                                  Column(children:[
+                                  SizedBox( height: 400, child: 
+                                    Image.network(
+                                '${Api.imagePath}${movie.posterPath}',
+                                filterQuality: FilterQuality.high,
+                                fit: BoxFit.cover,
+                    ),),
                                     const SizedBox(
-                                      height: 20,
+                                      height: 5,
                                     ),
                                     OutlinedButton(
                                       onPressed: () {},
@@ -161,7 +177,7 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                           )),
                                     ),
                                   ]),
-                                  const Expanded(
+                                   Expanded(
                                       child: Padding(
                                           padding: EdgeInsets.all(20),
                                           child: Column(
@@ -169,7 +185,7 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 SizedBox(height: 12),
-                                                MovieDetailsInfoWidget(),
+                                                MovieDetailsInfoWidget(movie: movie, key:scaffkey2),
                                                 SizedBox(height: 12),
                                                 UserRating()
                                               ])))
@@ -180,7 +196,8 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
 }
 
 class MovieDetailsInfoWidget extends StatelessWidget {
-  const MovieDetailsInfoWidget({super.key});
+  MovieDetailsInfoWidget({super.key, required this.movie});
+  final MovieModel movie;
 
   @override
   Widget build(BuildContext context) {
@@ -190,9 +207,9 @@ class MovieDetailsInfoWidget extends StatelessWidget {
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           RichText(
               maxLines: 3,
-              text: const TextSpan(children: [
+              text:  TextSpan(children: [
                 TextSpan(
-                    text: 'Movie name (2024)',
+                    text: movie.title,
                     style: TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 36,
@@ -212,9 +229,9 @@ class MovieDetailsInfoWidget extends StatelessWidget {
         const SizedBox(
           height: 20,
         ),
-        const Row(
+         Row(
           children: [
-            Text("Рейтинг (IMBD): ",
+            Text("Рейтинг: ",
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: 16,
@@ -223,7 +240,7 @@ class MovieDetailsInfoWidget extends StatelessWidget {
               Icons.star_half_outlined,
               color: Color.fromARGB(255, 255, 199, 0),
             ),
-            Text("8,9/10",
+            Text("${movie.voteAverage.toString()}/10",
                 style: TextStyle(
                   fontWeight: FontWeight.normal,
                   fontSize: 16,
@@ -240,7 +257,7 @@ class MovieDetailsInfoWidget extends StatelessWidget {
               Icons.visibility_outlined,
               color: AppColor.iconsGrey,
             ),
-            Text("106,9",
+            Text(movie.popularity.toString(),
                 style: TextStyle(
                   fontWeight: FontWeight.normal,
                   fontSize: 16,
@@ -303,11 +320,11 @@ class MovieDetailsInfoWidget extends StatelessWidget {
         ),
         RichText(
             maxLines: 2,
-            text: const TextSpan(children: [
+            text:  TextSpan(children: [
               TextSpan(
                   text:
-                      "опис опис опис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис опис",
-                  style: TextStyle(
+                  movie.overview
+                     ,  style: TextStyle(
                       fontWeight: FontWeight.normal,
                       fontSize: 16,
                       color: Colors.blueGrey))

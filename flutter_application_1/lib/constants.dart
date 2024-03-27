@@ -7,6 +7,8 @@ import 'package:flutter_application_1/theme/app_color.dart';
 // var myDefaultBackgroundColor = const Color.fromARGB(255, 214, 214, 214);
 // var myAccentColor = Color.fromARGB(255, 80, 42, 234);
 
+
+
 var myBottomNavigationBar = BottomNavigationBar(
   // currentIndex: _selectedTab,
   items: const <BottomNavigationBarItem>[
