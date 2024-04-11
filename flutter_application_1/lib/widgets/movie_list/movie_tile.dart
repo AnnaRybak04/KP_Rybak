@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/api/api.dart';
 import 'package:flutter_application_1/classes/movie_class.dart';
 import 'package:flutter_application_1/constants.dart';
 import 'package:flutter_application_1/resourses/app_color.dart';
-
+import 'package:flutter_application_1/widgets/movie_list/movie_details.dart';
 
 class MyTile extends StatefulWidget {
-  List<Movie> movies = my_movies;
+  // List<Movie> movies = my_movies;
+  final AsyncSnapshot snapshot;
 
-  MyTile({required Key key, required this.movies}) : super(key: key);
+  MyTile({required Key key, required this.snapshot}) : super(key: key);
 
   @override
   _MyTileState createState() => _MyTileState();
@@ -15,9 +17,14 @@ class MyTile extends StatefulWidget {
 
 class _MyTileState extends State<MyTile> {
   void _onMovieTap(int index) {
-    final _id = my_movies[index].id;
-    Navigator.of(context)
-        .pushNamed('/main_screen/movie_detais', arguments: _id);
+    print(widget.snapshot.data[index]);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                MovieDetailsWidget(movie: widget.snapshot.data[index])));
+    // Navigator.of(context).pushNamed('/main_screen/movie_detais',
+    //     arguments: widget.snapshot.data[index]);
   }
 
   @override
@@ -25,10 +32,10 @@ class _MyTileState extends State<MyTile> {
     return Stack(
       children: [
         ListView.builder(
-            itemCount: widget.movies.length,
+            itemCount: widget.snapshot.data.length,
             itemExtent: 160,
             itemBuilder: (context, index) {
-              final movie = widget.movies[index];
+              final movie = widget.snapshot.data[index];
               return Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 30, vertical: 6),
@@ -49,24 +56,29 @@ class _MyTileState extends State<MyTile> {
                         clipBehavior: Clip.hardEdge,
                         child: Row(
                           children: [
-                            Image(image: AssetImage(movie.imageName)),
+                            Image.network(
+                              '${Api.imagePath}${movie.posterPath}',
+                              filterQuality: FilterQuality.high,
+                              fit: BoxFit.cover,
+                            ),
                             const SizedBox(width: 8),
                             Expanded(
                                 child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const SizedBox(height: 12),
-                                Text("${movie.title} (${movie.year})",
+                                Text(
+                                    "${movie.title} (${movie.releaseDate.split('-')[0]})",
                                     // ignore: prefer_const_constructors
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20)),
-                                Text("${movie.genre}, ${movie.time}",
-                                    style: const TextStyle(
-                                        fontSize: 12,
-                                        color: AppColor.middleGrey)),
+                                // Text("${movie.genre}, ${movie.time}",
+                                //     style: const TextStyle(
+                                //         fontSize: 12,
+                                //         color: AppColor.middleGrey)),
                                 const SizedBox(height: 8),
-                                Text(movie.description,
+                                Text(movie.overview,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
@@ -79,7 +91,7 @@ class _MyTileState extends State<MyTile> {
                                         Icons.visibility_outlined,
                                         color: AppColor.iconsGrey,
                                       ),
-                                      Text(movie.viewAmount.toString(),
+                                      Text(movie.popularity.toString(),
                                           style: const TextStyle(
                                               fontSize: 12,
                                               color: AppColor.iconsGrey)),
@@ -89,19 +101,19 @@ class _MyTileState extends State<MyTile> {
                                         color: Color.fromARGB(255, 255, 199, 0),
                                       ),
                                       Text(
-                                        movie.IMDBrate.toString(),
+                                        movie.voteAverage.toString(),
                                         style: const TextStyle(
                                             fontSize: 12,
                                             color: AppColor.iconsGrey),
                                       ),
-                                      Expanded(
-                                        child: Container(
-                                            alignment: Alignment.centerRight,
-                                            child: const Icon(
-                                              Icons.favorite_outline,
-                                              color: AppColor.mainPurple,
-                                            )),
-                                      )
+                                      // Expanded(
+                                      //   child: Container(
+                                      //       alignment: Alignment.centerRight,
+                                      //       child: const Icon(
+                                      //         Icons.favorite_outline,
+                                      //         color: AppColor.mainPurple,
+                                      //       )),
+                                      // )
                                     ],
                                   ),
                                 ),

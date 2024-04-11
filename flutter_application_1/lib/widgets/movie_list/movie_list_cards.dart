@@ -36,7 +36,7 @@ class _MyCardState extends State<MyCard> {
     return ListView.builder(
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
-        itemCount: 12,
+        itemCount: 6,
         itemExtent: 240,
         itemBuilder: (context, index) {
           final movie = _movies[index];

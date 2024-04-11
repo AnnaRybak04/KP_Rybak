@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/responsive/responsive_layout.dart';
 import 'package:flutter_application_1/theme/app_color.dart';
+import 'package:flutter_application_1/widgets/media_grid.dart';
+import 'package:flutter_application_1/widgets/media_page.dart';
 import 'package:flutter_application_1/widgets/search_widget.dart';
-
 
 AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
     AppBar(
@@ -50,7 +51,15 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MediaPage(
+                                          type_of_content: 'movies',
+                                        )),
+                              );
+                            },
                             child: const Text(
                               "Фільми",
                               style: TextStyle(
@@ -58,7 +67,13 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
                               ),
                             )),
                         TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              //  Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => TVShowsPage()),
+                              // );
+                            },
                             child: const Text("Серіали",
                                 style: TextStyle(
                                   color: Colors.white,
@@ -90,7 +105,7 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
                     IconButton(
                       icon: const Icon(Icons.search),
                       onPressed: () {
-                        showSearch(context: context, delegate: SearchWidget());
+                        //  showSearch(context: context, delegate: SearchWidget());
                       },
                     ),
                     const SizedBox(
@@ -103,13 +118,17 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
                     const SizedBox(
                       width: 16.0,
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.favorite_border),
-                      onPressed: () {
-                        Navigator.of(context)
-                            .pushNamed('/main_screen/favorites');
-                      },
-                    )
+                    // IconButton(
+                    //   icon: const Icon(Icons.favorite_border),
+                    //   onPressed: () {
+                    //    Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //           builder: (context) =>  MediaPage()
+                    //           ),
+                    //     );
+                    //   },
+                    // )
                   ],
                 ))
             : Padding(
@@ -119,7 +138,7 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
                     IconButton(
                       icon: const Icon(Icons.search),
                       onPressed: () {
-                        showSearch(context: context, delegate: SearchWidget());
+                        //   showSearch(context: context, delegate: SearchWidget());
 
                         // Navigator.push(
                         //   context,

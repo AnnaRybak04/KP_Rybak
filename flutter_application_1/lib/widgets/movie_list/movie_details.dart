@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/api/api.dart';
 import 'package:flutter_application_1/classes/movie_class.dart';
 import 'package:flutter_application_1/models/movie_model.dart';
@@ -20,8 +22,6 @@ class MovieDetailsWidget extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffkey = GlobalKey();
   final GlobalKey<ScaffoldState> scaffkey1 = GlobalKey();
   final GlobalKey<ScaffoldState> scaffkey2 = GlobalKey();
-
-
 
   MovieDetailsWidget({super.key, required this.movie});
 
@@ -56,49 +56,64 @@ class MovieDetailsWidget extends StatelessWidget {
             : topNavigationBar(context, scaffkey),
         body: !ResponsiveLayout.isDesktopScreen(context)
             ? SingleChildScrollView(
-                //mobile+tablet
+                physics: const BouncingScrollPhysics(),
                 child: Center(
-                    child: Column(mainAxisSize: MainAxisSize.min, children: [
-                Stack(clipBehavior: Clip.none, children: [
-                  Container(
-                    width: 760,
-                    child:  Image.network(
-                                '${Api.imagePath}${movie.posterPath}',
-                                filterQuality: FilterQuality.high,
-                                fit: BoxFit.cover,
-                  )),
-                  Positioned(
-                    top: 240,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        // border: Border.all(color: Color.fromARGB(91, 71, 69, 69)),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color.fromARGB(49, 70, 70, 70),
-                            blurRadius: 15,
-                          ),
-                        ],
+                  child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                  // mainAxisSize: MainAxisSize.min,
+
+                  // clipBehavior: Clip.none,
+                  children: [
+                    Container(
+                      width: 760,
+                      height: 300,
+                      child: Image.network(
+                        '${Api.imagePath}${movie.backDropPath}',
+                        filterQuality: FilterQuality.high,
+                        fit: BoxFit.cover,
                       ),
-                      child:  Padding(
-                          padding: EdgeInsets.all(32),
-                          child: Column(
-                            children: [
-                               MovieDetailsInfoWidget(
-                                  movie: movie, key: scaffkey1),
-                              UserRating()
-                            ],
-                          )),
                     ),
-                  )
-                ])
-              ])))
+                    // Positioned(
+                    //   top: 240,
+                    //   left: 0,
+                    //   right: 0,
+                    //   child: Container(
+                    //     decoration: const BoxDecoration(
+                    //       color: Colors.white,
+                    //       borderRadius: BorderRadius.only(
+                    //         topLeft: Radius.circular(30),
+                    //         topRight: Radius.circular(30),
+                    //       ),
+                    //       boxShadow: [
+                    //         BoxShadow(
+                    //           color: Color.fromARGB(49, 70, 70, 70),
+                    //           blurRadius: 15,
+                    //         ),
+                    //       ],
+                    //     ),
+                    //     child: Padding(
+                    //       padding: EdgeInsets.all(32),
+                    //       child:
+                    //        Column(
+                    //         children: [
+                    Padding(
+                      padding: EdgeInsets.all(32),
+                      child: MovieDetailsInfoWidget(
+                        movie: movie,
+                        key: scaffkey1,
+                      ),
+                    )
+
+                    //             ],
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                  ],
+                )))
             : Container(
                 child: Padding(
                     padding:
@@ -124,7 +139,6 @@ class MovieDetailsWidget extends StatelessWidget {
                       Stack(children: [
                         Expanded(
                             child: Container(
-                                height: 460,
                                 decoration: const BoxDecoration(
                                   color: Colors.white,
                                   // border: Border.all(color: Color.fromARGB(91, 71, 69, 69)),
@@ -139,45 +153,20 @@ class MovieDetailsWidget extends StatelessWidget {
                                 ),
                                 clipBehavior: Clip.hardEdge,
                                 child: Row(children: [
-                                  Column(children:[
-                                  SizedBox( height: 400, child: 
-                                    Image.network(
-                                '${Api.imagePath}${movie.posterPath}',
-                                filterQuality: FilterQuality.high,
-                                fit: BoxFit.cover,
-                    ),),
+                                  Column(children: [
+                                    SizedBox(
+                                      height: 400,
+                                      child: Image.network(
+                                        '${Api.imagePath}${movie.posterPath}',
+                                        filterQuality: FilterQuality.high,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
                                     const SizedBox(
                                       height: 5,
                                     ),
-                                    OutlinedButton(
-                                      onPressed: () {},
-                                      style: ButtonStyle(
-                                          shape: MaterialStatePropertyAll(
-                                        RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                      )),
-                                      child: const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 58, vertical: 12),
-                                          child: Row(
-                                            children: [
-                                              Icon(Icons
-                                                  .favorite_border_outlined),
-                                              SizedBox(
-                                                width: 8,
-                                              ),
-                                              Text(
-                                                'Зберегти"',
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ],
-                                          )),
-                                    ),
                                   ]),
-                                   Expanded(
+                                  Expanded(
                                       child: Padding(
                                           padding: EdgeInsets.all(20),
                                           child: Column(
@@ -185,9 +174,11 @@ class MovieDetailsWidget extends StatelessWidget {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 SizedBox(height: 12),
-                                                MovieDetailsInfoWidget(movie: movie, key:scaffkey2),
+                                                MovieDetailsInfoWidget(
+                                                    movie: movie,
+                                                    key: scaffkey2),
                                                 SizedBox(height: 12),
-                                                UserRating()
+                                                // UserRating()
                                               ])))
                                 ])))
                       ])
@@ -196,190 +187,254 @@ class MovieDetailsWidget extends StatelessWidget {
 }
 
 class MovieDetailsInfoWidget extends StatelessWidget {
-  MovieDetailsInfoWidget({super.key, required this.movie});
+  MovieDetailsInfoWidget({Key? key, required this.movie}) : super(key: key);
+
   final MovieModel movie;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              RichText(
+                maxLines: 3,
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: movie.title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 36,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // !ResponsiveLayout.isDesktopScreen(context)
+              //     ? InkWell(
+              //         onTap: () {},
+              //         child: Icon(
+              //           Icons.favorite_border,
+              //           color: AppColor.mainPurple,
+              //           size: 40,
+              //         ),
+              //       )
+              //    : Container(),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              Text(
+                "Рейтинг: ",
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 16,
+                ),
+              ),
+              Icon(
+                Icons.star_half_outlined,
+                color: Color.fromARGB(255, 255, 199, 0),
+              ),
+              Text(
+                "${movie.voteAverage.toString()}/10",
+                style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(width: 24),
+              Text(
+                "Перегляди: ",
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 16,
+                ),
+              ),
+              Icon(
+                Icons.visibility_outlined,
+                color: AppColor.iconsGrey,
+              ),
+              Text(
+                movie.popularity.toString(),
+                style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
           RichText(
-              maxLines: 3,
-              text:  TextSpan(children: [
-                TextSpan(
-                    text: movie.title,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 36,
-                    ))
-              ])),
-          !ResponsiveLayout.isDesktopScreen(context)
-              ? const InkWell(
-                  onTap: null,
-                  child: Icon(
-                    Icons.favorite_border,
-                    color: AppColor.mainPurple,
-                    size: 40,
-                  ),
-                )
-              : Container()
-        ]),
-        const SizedBox(
-          height: 20,
-        ),
-         Row(
-          children: [
-            Text("Рейтинг: ",
-                style: TextStyle(
-                  fontWeight: FontWeight.w900,
-                  fontSize: 16,
-                )),
-            Icon(
-              Icons.star_half_outlined,
-              color: Color.fromARGB(255, 255, 199, 0),
-            ),
-            Text("${movie.voteAverage.toString()}/10",
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontSize: 16,
-                )),
-            const SizedBox(
-              width: 24,
-            ),
-            Text("Перегляди: ",
-                style: TextStyle(
-                  fontWeight: FontWeight.w900,
-                  fontSize: 16,
-                )),
-            Icon(
-              Icons.visibility_outlined,
-              color: AppColor.iconsGrey,
-            ),
-            Text(movie.popularity.toString(),
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontSize: 16,
-                )),
-          ],
-        ),
-        const SizedBox(
-          height: 12,
-        ),
-        RichText(
             maxLines: 1,
-            text: const TextSpan(children: [
-              TextSpan(
+            text: const TextSpan(
+              children: [
+                TextSpan(
                   text: 'Режисер: ',
                   style: TextStyle(
                     fontWeight: FontWeight.w900,
                     fontSize: 16,
-                  )),
-              TextSpan(
+                  ),
+                ),
+                TextSpan(
                   text: "Ім'я режисера",
                   style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 16,
-                      color: Colors.blueGrey))
-            ])),
-        const SizedBox(
-          height: 12,
-        ),
-        RichText(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 16,
+                    color: Colors.blueGrey,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          RichText(
             maxLines: 1,
-            text: const TextSpan(children: [
-              TextSpan(
+            text: const TextSpan(
+              children: [
+                TextSpan(
                   text: 'Жанр: ',
                   style: TextStyle(
                     fontWeight: FontWeight.w900,
                     fontSize: 16,
-                  )),
-              TextSpan(
+                  ),
+                ),
+                TextSpan(
                   text: "Жанр 1/Жанр 2",
                   style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 16,
-                      color: Colors.blueGrey))
-            ])),
-        const SizedBox(
-          height: 12,
-        ),
-        RichText(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 16,
+                    color: Colors.blueGrey,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          RichText(
             maxLines: 1,
-            text: const TextSpan(children: [
-              TextSpan(
+            text: const TextSpan(
+              children: [
+                TextSpan(
                   text: 'Опис: ',
                   style: TextStyle(
                     fontWeight: FontWeight.w900,
                     fontSize: 16,
-                  )),
-            ])),
-        const SizedBox(
-          height: 12,
-        ),
-        RichText(
-            maxLines: 2,
-            text:  TextSpan(children: [
-              TextSpan(
-                  text:
-                  movie.overview
-                     ,  style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 16,
-                      color: Colors.blueGrey))
-            ])),
-        const SizedBox(
-          height: 12,
-        ),
-        RichText(
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: movie.overview,
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 16,
+                    color: Colors.blueGrey,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          RichText(
             maxLines: 1,
-            text: const TextSpan(children: [
-              TextSpan(
+            text: const TextSpan(
+              children: [
+                TextSpan(
                   text: 'Актори: ',
                   style: TextStyle(
                     fontWeight: FontWeight.w900,
                     fontSize: 16,
-                  )),
-            ])),
-        const SizedBox(
-          height: 12,
-        ),
-        RichText(
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          RichText(
             maxLines: 1,
-            text: const TextSpan(children: [
-              TextSpan(
+            text: const TextSpan(
+              children: [
+                TextSpan(
                   text:
-                      "опис опис опис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис опис",
+                      "опис опис опис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис описопис опис",
                   style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 16,
-                      color: Colors.blueGrey))
-            ])),
-        const SizedBox(
-          height: 12,
-        ),
-        RichText(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 16,
+                    color: Colors.blueGrey,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          RichText(
             maxLines: 1,
-            text: const TextSpan(children: [
-              TextSpan(
+            text: const TextSpan(
+              children: [
+                TextSpan(
                   text: 'Мій рейтинг: ',
                   style: TextStyle(
                     fontWeight: FontWeight.w900,
                     fontSize: 16,
-                  )),
-            ])),
-      ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Center(
+            child: SizedBox(width: 300,
+            child: Column(children: [
+              UserRating(), FavButton()
+            ],),),
+          )
+          
+        ],
+      ),
     );
   }
 }
 
-class RatesAndViewsWidget extends StatelessWidget {
-  const RatesAndViewsWidget({super.key});
+class FavButton extends StatefulWidget {
+  const FavButton({super.key});
 
   @override
+  State<FavButton> createState() => _FavButtonState();
+}
+
+class _FavButtonState extends State<FavButton> {
+  @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return OutlinedButton(
+      onPressed: () {},
+      style: ButtonStyle(
+          shape: MaterialStatePropertyAll(
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      )),
+      child: const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 58, vertical: 12),
+          child: Row(
+            children: [
+              Icon(Icons.favorite_border_outlined),
+              SizedBox(
+                width: 8,
+              ),
+              Text(
+                'Зберегти"',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ],
+          )),
+    );
   }
 }
 

@@ -69,7 +69,7 @@ class _DesktopScaffoldState extends State<DesktopScaffold> {
                             child: Text(snapshot.error.toString()),
                           );
                         } else if (snapshot.hasData) {
-                          print(snapshot.data);
+                         
                           return MyCard(
                             key: scaffkey,
                             snapshot: snapshot,

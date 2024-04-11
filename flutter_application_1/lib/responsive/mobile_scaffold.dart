@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/constants.dart';
+import 'package:flutter_application_1/site_layout.dart';
 import 'package:flutter_application_1/widgets/movie_list/movie_tile.dart';
 
 
@@ -23,10 +24,31 @@ class _MobileScaffoldState extends State<MobileScaffold> {
               Column(
                 children: [
                   Expanded(
-                      child: MyTile(
-                    movies: my_movies,
-                    key: scaffkey,
-                  ))
+                      child: SizedBox(
+                      height: 440,
+                      width: double.infinity,
+                      child: FutureBuilder(
+                        future: allMovies,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return Center(
+                              child: Text(snapshot.error.toString()),
+                            );
+                          } else if (snapshot.hasData) {
+                            print(snapshot.data);
+                            return MyTile(
+                              key: scaffkey,
+                              snapshot: snapshot
+                            );
+                          } else {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  )
                 ],
               ),
             ]));
